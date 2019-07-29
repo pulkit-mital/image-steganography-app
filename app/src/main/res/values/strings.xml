@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Image Steganography</string>
+    <string name="text_encode_image">Encode Image</string>
+    <string name="text_decode_image">Decode Image</string>
+    <string name="text_upload">Upload</string>
+    <string name="hint_secret_key">Secret Key</string>
+    <string name="hint_message">Message</string>
+    <string name="text_introduction">This application helps you to hide your message inside an image file and share with your friends, this will help you and your friend to communicate in secret and nobody will ever know.</string>
+</resources>
