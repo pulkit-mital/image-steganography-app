@@ -108,7 +108,7 @@ public class EncodeViewModel extends AndroidViewModel implements EncodeContract.
     @Override
     public void showEncodeImage(Bitmap encodedImage) {
         originalImage.postValue(encodedImage);
-        snackbarMessage.postValue("Encoded Successfully");
+        snackbarMessage.postValue("Encoded Successfully and saved in downloads with a name Encoded.png");
         shareVisibility.postValue(View.VISIBLE);
     }
 
