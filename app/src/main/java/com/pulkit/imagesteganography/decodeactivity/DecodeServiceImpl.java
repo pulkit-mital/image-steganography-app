@@ -46,7 +46,7 @@ public class DecodeServiceImpl implements DecodeServiceApi {
                         System.gc();
                     }
 
-                    if(imageSteganography.isWrongSecretKey()){
+                    if(result.isWrongSecretKey()){
                         emitter.onError(new Exception("Please enter correct secret key"));
                     }
 
