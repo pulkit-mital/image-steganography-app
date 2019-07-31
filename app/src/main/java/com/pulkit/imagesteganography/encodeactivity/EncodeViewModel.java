@@ -20,6 +20,7 @@ import com.pulkit.imagesteganography.R;
 import com.pulkit.imagesteganography.navigation.Navigate;
 import com.pulkit.imagesteganography.utilitie.Constants;
 import com.pulkit.imagesteganography.utilitie.PermissionUtils;
+import com.pulkit.imagesteganography.utilitie.Utils;
 
 import java.io.IOException;
 
@@ -31,10 +32,12 @@ public class EncodeViewModel extends AndroidViewModel implements EncodeContract.
     private MutableLiveData<String> message = new MutableLiveData<>();
     private MutableLiveData<Bitmap> originalImage = new MutableLiveData<>();
     private MutableLiveData<Integer> shareVisibility = new MutableLiveData<>(View.GONE);
+    private MutableLiveData<String> snackbarMessage = new MutableLiveData<>("");
     private View.OnClickListener onClickListener;
     private Application application;
     private EncodePresenter encodePresenter;
     private PermissionUtils permissionUtils;
+
 
     public EncodeViewModel(@NonNull Application application) {
         super(application);
@@ -54,6 +57,10 @@ public class EncodeViewModel extends AndroidViewModel implements EncodeContract.
 
     public MutableLiveData<Integer> getShareVisibility() {
         return shareVisibility;
+    }
+
+    public MutableLiveData<String> getSnackbarMessage() {
+        return snackbarMessage;
     }
 
     public void onUploadClicked(View view) {
@@ -86,10 +93,14 @@ public class EncodeViewModel extends AndroidViewModel implements EncodeContract.
 
     public void onEncodeClicked(View view) {
 
-        if (permissionUtils.isPermissionGranted(new String[]{"android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"})) {
-            encodePresenter.encodeImage(message.getValue(), secretKey.getValue(), originalImage.getValue());
+        if (!Utils.isEmpty(message.getValue()) && !Utils.isEmpty(secretKey.getValue())) {
+            if (permissionUtils.isPermissionGranted(new String[]{"android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"})) {
+                encodePresenter.encodeImage(message.getValue(), secretKey.getValue(), originalImage.getValue());
+            } else {
+                permissionUtils.showPermissionDialog(Constants.RequestCode.REQUEST_WRITE_STORAGE);
+            }
         } else {
-            permissionUtils.showPermissionDialog(Constants.RequestCode.REQUEST_WRITE_STORAGE);
+            snackbarMessage.postValue("Please enter message and secret key");
         }
 
     }
@@ -97,8 +108,13 @@ public class EncodeViewModel extends AndroidViewModel implements EncodeContract.
     @Override
     public void showEncodeImage(Bitmap encodedImage) {
         originalImage.postValue(encodedImage);
-        Toast.makeText(application, "encoded successfully", Toast.LENGTH_SHORT).show();
+        snackbarMessage.postValue("Encoded Successfully");
         shareVisibility.postValue(View.VISIBLE);
+    }
+
+    @Override
+    public void showError(String message) {
+        snackbarMessage.postValue(message);
     }
 
     public void onShareClicked(View view) {

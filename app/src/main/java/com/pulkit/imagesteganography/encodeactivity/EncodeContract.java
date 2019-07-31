@@ -8,6 +8,7 @@ public interface EncodeContract {
 
     interface View {
         void showEncodeImage(Bitmap encodedImage);
+        void showError(String message);
     }
 
     interface Presenter {

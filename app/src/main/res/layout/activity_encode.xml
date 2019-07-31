@@ -12,6 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
+        app:snackMessage="@{encodeViewModel.snackbarMessage}"
         android:layout_height="match_parent">
 
         <include
@@ -110,10 +111,11 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
                     android:visibility="@{encodeViewModel.shareVisibility}"
                     android:onClick="@{encodeViewModel::onShareClicked}"
                     android:padding="15dp"
-                    android:text="@string/text_encode_image"
+                    android:text="@string/text_share"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btn_encode" />

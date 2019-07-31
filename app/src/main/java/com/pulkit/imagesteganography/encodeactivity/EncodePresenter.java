@@ -40,7 +40,7 @@ public class EncodePresenter implements EncodeContract.Presenter{
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e("Error: ", e.getMessage());
+                        view.showError(e.getMessage());
                     }
 
                     @Override

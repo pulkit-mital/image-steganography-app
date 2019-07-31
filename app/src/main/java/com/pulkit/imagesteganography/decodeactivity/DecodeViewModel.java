@@ -17,6 +17,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.pulkit.imagesteganography.R;
 import com.pulkit.imagesteganography.utilitie.Constants;
+import com.pulkit.imagesteganography.utilitie.Utils;
 
 import java.io.IOException;
 
@@ -27,6 +28,7 @@ public class DecodeViewModel extends AndroidViewModel implements DecodeContract.
     private MutableLiveData<String> secretKey = new MutableLiveData<>();
     private MutableLiveData<String> message = new MutableLiveData<>();
     private MutableLiveData<Bitmap> encodedImage = new MutableLiveData<>();
+    private MutableLiveData<String> snackbarMessage = new MutableLiveData<>();
     private View.OnClickListener onClickListener;
     private Application application;
     private DecodePresenter decodePresenter;
@@ -50,6 +52,10 @@ public class DecodeViewModel extends AndroidViewModel implements DecodeContract.
         return encodedImage;
     }
 
+    public MutableLiveData<String> getSnackbarMessage() {
+        return snackbarMessage;
+    }
+
     public void setClickListener(View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
@@ -71,7 +77,11 @@ public class DecodeViewModel extends AndroidViewModel implements DecodeContract.
     }
 
     public void onDecodeClicked(View view) {
-        decodePresenter.decodeImage(secretKey.getValue(), encodedImage.getValue());
+        if(!Utils.isEmpty(secretKey.getValue())) {
+            decodePresenter.decodeImage(secretKey.getValue(), encodedImage.getValue());
+        }else{
+            snackbarMessage.postValue("Please enter valid secret key");
+        }
     }
 
     @Override
@@ -83,10 +93,11 @@ public class DecodeViewModel extends AndroidViewModel implements DecodeContract.
     @Override
     public void showDecodedMessage(String message) {
         this.message.postValue(message);
+        snackbarMessage.postValue("Decoded Successfully!");
     }
 
     @Override
     public void showError(String message) {
-        Toast.makeText(application, message, Toast.LENGTH_SHORT).show();
+        snackbarMessage.postValue(message);
     }
 }
