@@ -92,7 +92,6 @@ public class EncodeViewModel extends AndroidViewModel implements EncodeContract.
     }
 
     public void onEncodeClicked(View view) {
-
         if (!Utils.isEmpty(message.getValue()) && !Utils.isEmpty(secretKey.getValue())) {
             if (permissionUtils.isPermissionGranted(new String[]{"android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"})) {
                 encodePresenter.encodeImage(message.getValue(), secretKey.getValue(), originalImage.getValue());
@@ -128,10 +127,14 @@ public class EncodeViewModel extends AndroidViewModel implements EncodeContract.
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == Constants.RequestCode.REQUEST_WRITE_STORAGE && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            encodePresenter.encodeImage(message.getValue(), secretKey.getValue(), originalImage.getValue());
-        } else {
-            permissionUtils.showPermissionDialog(Constants.RequestCode.REQUEST_READ_STORAGE_PERMISSION);
+
+        switch(requestCode){
+            case Constants.RequestCode.REQUEST_WRITE_STORAGE:
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                    encodePresenter.encodeImage(message.getValue(), secretKey.getValue(), originalImage.getValue());
+                }
+                break;
+
         }
     }
 }

@@ -92,7 +92,18 @@ public class EncodeActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        encodeViewModel.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch(requestCode){
+            case Constants.RequestCode.REQUEST_WRITE_STORAGE:
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                    encodeViewModel.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                }
+                break;
+            case Constants.RequestCode.REQUEST_READ_STORAGE_PERMISSION:
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                    Navigate.openImageChooser(this);
+                }
+                break;
 
+        }
     }
 }
